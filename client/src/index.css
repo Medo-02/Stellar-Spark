@@ -4,3 +4,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+body {
+    background-color: #192939;
+}
+button.primary {
+    @apply bg-secondary2 text-primary2 hover:text-accent1;
+}
+Link {
+    @apply text-primary1 hover:text-secondary2;
+}
+input {
+    @apply bg-[#EDF3F8] 
+           border-2 border-accent2
+           text-primary2
+           placeholder:text-accent2
+           focus:border-accent1
+           focus:border-2
+           focus:outline-none
+           p-2
+           rounded-md;
+}

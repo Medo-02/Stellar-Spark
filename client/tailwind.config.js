@@ -5,9 +5,12 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundColor: {
+        default: '#192939',
+      },
       colors: {
         // Primary Colors
-        primary1: '#F4D7C3',    // Peach
+        primary1: '#FDDFAF',    // Moon Yellow
         primary2: '#2A2B4D',    // Midnight Blue
         
         // Secondary Colors
@@ -15,9 +18,9 @@ export default {
         secondary2: '#A5C1DC',  // Pale Blue
         
         // Accent Colors
-        accent1: '#FDDFAF',     // Moon Yellow
+        accent1: '#F4D7C3',     // Peach
         accent2: '#9FA3B2',     // Muted Gray
-      }
+      },
     },
   },
   plugins: [],
@@ -26,7 +29,7 @@ export default {
 //colors 
 
 // Primary Colors:
-// Peach (#F4D7C3) - For the background or large sections.
+// Moon Yellow (#FDDFAF) - For the background or large sections.
 // Midnight Blue (#2A2B4D) - For text, headers, or icons.
 
 // Secondary Colors:
@@ -36,5 +39,5 @@ export default {
 
 // Accent Colors:
 
-// Moon Yellow (#FDDFAF) - For call-to-action buttons or important notifications.
+// F4D7C3 (#F4D7C3) - For call-to-action buttons or important notifications.
 // Muted Gray (#9FA3B2) - For subtle elements like dividers or hover states.
