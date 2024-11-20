@@ -1,13 +1,16 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "../UserContext";
 
 export default function Navbar() {
+    const { user } = useContext(UserContext);
     return (
         <header className="fixed w-full p-3 flex justify-between bg-primary1">
             {/* Logo */}
-            <a href="" className='flex items-center gap-1'>
+            <Link to='/' className='flex items-center gap-1'>
                 <img className='w-10 h-10' src="./logo.png" alt="" />
                 <span className='font-bold text-xl text-primary2 mb-1'>Stellar</span>
-            </a>
+            </Link>
             
             {/* Search Bar */}
             <div className="flex items-center gap-2 bg-secondary1 border border-accent2 rounded-full py-2 px-4 shadow-md shadow-gray-300">
@@ -27,6 +30,11 @@ export default function Navbar() {
                 <div className="px-3 py-2 bg-secondary2 rounded-full ">
                     <i className="fi fi-rr-user text-primary2 group-hover:text-accent1"></i>
                 </div>
+                {!!user && (
+                    <div className="px-2 py-2 rounded-full ">
+                        {user.name}
+                    </div>
+                )}
             </Link>
         </header>
     )
