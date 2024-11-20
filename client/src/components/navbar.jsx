@@ -23,7 +23,7 @@ export default function Navbar() {
             </div>
             
             {/* User Profile */}
-            <Link to='/login' className="flex items-center gap-2 bg-secondary1 border border-accent2 rounded-full py-2 px-4 shadow-md shadow-gray-300 group">
+            <Link to={user?'/account':'/login'} className="flex items-center gap-2 bg-secondary1 border border-accent2 rounded-full py-2 px-4 shadow-md shadow-gray-300 group">
                 <div className="px-1 group-hover:text-accent1">
                     <i className="fi fi-br-menu-burger text-primary2 group-hover:text-accent1"></i>
                 </div>

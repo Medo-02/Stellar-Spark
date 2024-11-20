@@ -16,7 +16,7 @@ export default function RegisterPage() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center mx-auto">
+        <div className="page-container-fixed">
             <h1 className="font-bold text-primary1 text-2xl md:text-3xl lg:text-5xl mb-4">Register</h1>
             <form onSubmit={registerUser} className="container flex flex-col gap-3 max-w-sm md:max-w-md lg:max-w-lg mx-auto px-4">
                 <input className="w-full p-2 rounded-md border border-accent2" type="text"

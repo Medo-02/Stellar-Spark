@@ -25,7 +25,7 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center mx-auto">
+        <div className="page-container-fixed">
             <h1 className="font-bold text-primary1 text-2xl md:text-3xl lg:text-5xl mb-4">Login</h1>   
             <form onSubmit={loginUser} className="container mx-auto px-4 flex flex-col gap-3 max-w-sm md:max-w-md lg:max-w-lg">
                 <input className="w-full p-2 rounded-md border border-accent2" required type="email"

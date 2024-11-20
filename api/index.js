@@ -70,4 +70,7 @@ app.get('/profile', (req, res) => {
     }
 });
 
+app.post('/logout', (req, res) => {
+    res.cookie('token', '').json({message: 'logged out'});
+});
 app.listen(4000);

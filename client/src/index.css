@@ -5,12 +5,28 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+}
+
+/* Add a utility class for page containers */
+.page-container {
+    @apply flex mx-auto px-4 pt-32;
+}
+
+/* For pages that should be exactly viewport height */
+.page-container-fixed {
+    @apply flex flex-col items-center justify-center mx-auto;
+    height: 100vh;
+}
 
 body {
     background-color: #192939;
 }
 button.primary {
     @apply bg-secondary2 text-primary2 hover:text-accent1;
+}
+button.danger {
+    @apply bg-red-500 text-accent1 hover:text-primary2;
 }
 Link {
     @apply text-primary1 hover:text-secondary2;
