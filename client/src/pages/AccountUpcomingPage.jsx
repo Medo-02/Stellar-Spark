@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { UserContext } from "../UserContext";
 import { Navigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import AccountNav from "../components/AccountNav";
 
 export default function AccountUpcomingPage() {
     const { user, ready } = useContext(UserContext);
@@ -9,11 +10,7 @@ export default function AccountUpcomingPage() {
     if (!user && ready) return <Navigate to={'/login'} />
     return (
         <div className="page-container">
-            <nav className="w-full flex justify-center items-center gap-4">
-                <Link to={'/account'} className="py-2 px-4 text-accent1 hover:text-secondary2">My Profile</Link>
-                <Link className="py-2 px-4 bg-secondary2 text-primary2 hover:text-accent1 rounded-full">My Upcoming Events</Link>
-                <Link to={'/account/hosting'} className="py-2 px-4 text-accent1 hover:text-secondary2">Events I'm Hosting</Link>
-            </nav>
+            <AccountNav />
         </div>
     )
 }

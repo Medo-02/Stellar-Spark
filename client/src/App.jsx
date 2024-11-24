@@ -26,6 +26,7 @@ function App() {
             <Route path='/account' element={<AccountPage />} />
             <Route path='/account/upcoming' element={<AccountUpcomingPage />} />
             <Route path='/account/hosting' element={<AccountHostingPage />} />
+            <Route path='/account/hosting/:action' element={<AccountHostingPage />} />
           </Routes>
       </UserContextProvider>
     </div>

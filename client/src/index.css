@@ -1,6 +1,9 @@
 @import url('https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-straight/css/uicons-regular-straight.css');
 @import url('https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css');
 @import url('https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css');
+@import url('https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css'); /* Calendar */
+@import url('https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'); /* Event */
+@import url('https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'); /* Plus */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -23,7 +26,7 @@ body {
     background-color: #192939;
 }
 button.primary {
-    @apply bg-secondary2 text-primary2 hover:text-accent1;
+    @apply bg-secondary2 text-primary2 hover:text-accent1 whitespace-nowrap;
 }
 button.danger {
     @apply bg-red-500 text-accent1 hover:text-primary2;
@@ -32,6 +35,28 @@ Link {
     @apply text-primary1 hover:text-secondary2;
 }
 input {
+    @apply bg-[#EDF3F8] 
+           border-2 border-accent2
+           text-primary2
+           placeholder:text-accent2
+           focus:border-accent1
+           focus:border-2
+           focus:outline-none
+           p-2
+           rounded-md;
+}
+textarea {
+    @apply bg-[#EDF3F8] 
+           border-2 border-accent2
+           text-primary2
+           placeholder:text-accent2
+           focus:border-accent1
+           focus:border-2
+           focus:outline-none
+           p-2
+           rounded-md;
+}
+select {
     @apply bg-[#EDF3F8] 
            border-2 border-accent2
            text-primary2
