@@ -4,6 +4,7 @@
 @import url('https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css'); /* Calendar */
 @import url('https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'); /* Event */
 @import url('https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'); /* Plus */
+@import url('https://cdn-uicons.flaticon.com/2.6.0/uicons-thin-rounded/css/uicons-thin-rounded.css'); /* Upload Cloud */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -25,12 +26,17 @@
 body {
     background-color: #192939;
 }
+
 button.primary {
     @apply bg-secondary2 text-primary2 hover:text-accent1 whitespace-nowrap;
 }
 button.danger {
     @apply bg-red-500 text-accent1 hover:text-primary2;
 }
+button.transparent {
+    @apply bg-transparent text-accent2 hover:text-secondary2 border-2 border-accent2;
+}
+
 Link {
     @apply text-primary1 hover:text-secondary2;
 }

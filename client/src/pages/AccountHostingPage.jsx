@@ -1,12 +1,53 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../UserContext";
 import { Navigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import AccountNav from "../components/AccountNav";
 
 export default function AccountHostingPage() {
     const { user, ready } = useContext(UserContext);
     const { action } = useParams();
+
+    //Event data
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [location, setLocation] = useState('');
+    const [date, setDate] = useState('');
+    const [time, setTime] = useState('');
+    const [type, setType] = useState('');
+    const [photos, setPhotos] = useState([]);
+    const [photoLink, setPhotoLink] = useState('');
+    const [features, setFeatures] = useState([]);
+    const [extraInfo, setExtraInfo] = useState('');
+    const [maxParticipants, setMaxParticipants] = useState('');
+
+    const featureOptions = [
+    'Free Parking',
+    'Food Provided',
+    'Wheelchair Accessible',
+    'Family Friendly',
+        'Pet Friendly'
+    ];
+
+    const handleFeatureChange = (feature) => {
+        setFeatures(prev => {
+            if (prev.includes(feature)) {
+                return prev.filter(selected => selected !== feature);
+            } else {
+                return [...prev, feature];
+            }
+        });
+    }
+
+    async function addPhotoByLink(e) {
+        e.preventDefault();
+        const { data: filename } = await axios.post('/upload-by-link', { link: photoLink });
+        setPhotos(prev => {
+            return [...prev, filename];
+        });
+        setPhotoLink('');
+    }
     
     if (!user && ready) return <Navigate to={'/login'} />
     return (
@@ -25,23 +66,26 @@ export default function AccountHostingPage() {
                     <form className="flex flex-col gap-4 items-center">
                         <div className="w-full">
                             <h2 className="text-accent2 text-base md:text-lg font-bold border-b border-accent2 mb-2 text-center sm:text-left">Event Title <span className="text-red-500">*</span></h2>
-                            <input type="text" placeholder="Add the title of the event" className="w-full" />
+                            <input type="text" placeholder="Add the title of the event" className="w-full" value={title} onChange={e => setTitle(e.target.value)} />
                         </div>
                         <div className="w-full">
                             <h2 className="text-accent2 text-base md:text-lg font-bold border-b border-accent2 mb-2 text-center sm:text-left">Event Description</h2>
-                            <textarea className="w-full" placeholder="Add a description of the event"></textarea>
+                            <textarea className="w-full" placeholder="Add a description of the event" value={description} onChange={e => setDescription(e.target.value)}></textarea>
                         </div>
                         <div className="w-full">
                             <h2 className="text-accent2 text-base md:text-lg font-bold border-b border-accent2 mb-2 text-center sm:text-left">Event Location</h2>
-                            <input type="text" placeholder="Add the location of the event" className="w-full" />
+                            <input type="text" placeholder="Add the location of the event" className="w-full" value={location} onChange={e => setLocation(e.target.value)} />
                         </div>
                         <div className="w-full">
                             <h2 className="text-accent2 text-base md:text-lg font-bold border-b border-accent2 mb-2 text-center sm:text-left">Event Date & Time <span className="text-red-500">*</span></h2>
-                            <input type="date" placeholder="Add the date and time of the event" className="w-full" />
+                            <div className="flex gap-2">
+                                <input type="date" placeholder="Add the date of the event" className="w-full" value={date} onChange={e => setDate(e.target.value)} />
+                                <input type="input" placeholder="14:00" className="w-full" value={time} onChange={e => setTime(e.target.value)} />
+                            </div>
                         </div>
                         <div className="w-full">
                             <h2 className="text-accent2 text-base md:text-lg font-bold border-b border-accent2 mb-2 text-center sm:text-left">Event Type</h2>
-                            <select className="w-full">
+                            <select className="w-full" value={type} onChange={e => setType(e.target.value)}>
                                 <option value="professional">Professional</option>
                                 <option value="social">Social</option>
                                 <option value="educational">Educational</option>
@@ -53,44 +97,43 @@ export default function AccountHostingPage() {
                         <div className="w-full">
                             <h2 className="text-accent2 text-base md:text-lg font-bold border-b border-accent2 mb-2 text-center sm:text-left">Photos</h2>
                             <div className="flex gap-2">
-                                <input className="w-full" type="text" placeholder="Add the link of the photo" />
-                                <button className="primary rounded-full px-3 py-2">Add Photo</button>
+                                <input className="w-full" type="text" placeholder="Add the link of the photo" value={photoLink} onChange={e => setPhotoLink(e.target.value)} />
+                                <button onClick={addPhotoByLink} className="primary rounded-full px-3 py-2">Add Photo</button>
                             </div>
                             <p className="text-accent2 text-sm md:text-base font-bold text-center sm:text-left">or Upload Photos</p>
-                            <input type="file" multiple className="w-full" />
+                            <div className="flex gap-2">
+                                {photos.length > 0 && (
+                                    photos.map(link => (
+                                    <div className="w-[20%]">
+                                        <img src={'http://localhost:4000/uploads/'+link} alt="" className="max-w-full h-auto" />
+                                        </div>
+                                    ))
+                                )}
+                                <button className="transparent w-[20%] py-12 rounded-md text-2xl"><i className="fi fi-tr-cloud-upload-alt mr-2"></i>Upload</button>
+                            </div>
                         </div>
                         <div className="w-full">
                             <h2 className="text-accent2 text-base md:text-lg font-bold border-b border-accent2 mb-2 text-center sm:text-left">Features</h2> 
-                            <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
-                                <label className="text-accent2 text-sm md:text-base flex items-center gap-2">
-                                    <input type="checkbox" />
-                                    <span>Feature 1</span>
-                                </label>
-                                <label className="text-accent2 text-sm md:text-base flex items-center gap-2">
-                                    <input type="checkbox" />
-                                    <span>Feature 2</span>
-                                </label>
-                                <label className="text-accent2 text-sm md:text-base flex items-center gap-2">
-                                    <input type="checkbox" />
-                                    <span>Feature 3</span>
-                                </label>
-                                <label className="text-accent2 text-sm md:text-base flex items-center gap-2">
-                                    <input type="checkbox" />
-                                    <span>Feature 4</span>
-                                </label>
-                                <label className="text-accent2 text-sm md:text-base flex items-center gap-2">
-                                    <input type="checkbox" />
-                                    <span>Feature 5</span>
-                                </label>
+                            <div className="grid gap-2 place-items-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                                {featureOptions.map((feature) => (
+                                    <label key={feature} className="border border-accent2 p-4 rounded-2xl w-full text-accent2 text-sm md:text-base flex items-center gap-2">
+                                        <input 
+                                        type="checkbox"
+                                        checked={features.includes(feature)}
+                                            onChange={() => handleFeatureChange(feature)}
+                                        />
+                                        <span>{feature}</span>
+                                    </label>
+                                ))}
                             </div>
                         </div>
                         <div className="w-full">
                             <h2 className="text-accent2 text-base md:text-lg font-bold border-b border-accent2 mb-2 text-center sm:text-left">Extra Info</h2> 
-                            <input type="text" placeholder="Add any additional information" className="w-full" />
+                            <input type="text" placeholder="Add any additional information" className="w-full" value={extraInfo} onChange={e => setExtraInfo(e.target.value)} />
                         </div>
                         <div className="w-full">
                             <h2 className="text-accent2 text-base md:text-lg font-bold border-b border-accent2 mb-2 text-center sm:text-left">Max Participants <span className="text-red-500">*</span></h2>
-                            <input type="number" placeholder="Specify the maximum number of participants" className="w-full" />
+                            <input type="number" placeholder="Specify the maximum number of participants" className="w-full" value={maxParticipants} onChange={e => setMaxParticipants(e.target.value)} />
                         </div>
                         <button className="primary rounded-full px-3 py-2 w-[90%] sm:w-[60%] md:w-[40%] lg:w-[20%] mt-2 mx-auto" type="submit">Create Event</button>
                     </form>

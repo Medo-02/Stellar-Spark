@@ -12,6 +12,8 @@ node_modules/
 /api/.env
 /client/.env
 
+/api/uploads/*
+
 # Build directories
 /client/dist/
 /client/dist-ssr/
