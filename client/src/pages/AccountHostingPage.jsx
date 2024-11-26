@@ -27,7 +27,7 @@ export default function AccountHostingPage() {
     'Food Provided',
     'Wheelchair Accessible',
     'Family Friendly',
-        'Pet Friendly'
+    'Pet Friendly'
     ];
 
     const handleFeatureChange = (feature) => {
@@ -49,6 +49,23 @@ export default function AccountHostingPage() {
         setPhotoLink('');
     }
     
+    function uploadPhoto(e) {
+        const files = e.target.files;
+        const data = new FormData();
+        for (let i = 0; i < files.length; i++) {
+            data.append('photos', files[i]);
+        }
+
+        axios.post('/upload-by-files', data, {
+            headers: {'Content-Type': 'multipart/form-data'}
+        }).then(res => {
+            const { data: filenames } = res;
+            setPhotos(prev => {
+                return [...prev, ...filenames];
+            });
+        });
+    }
+
     if (!user && ready) return <Navigate to={'/login'} />
     return (
         <div className="page-container flex flex-col gap-4">
@@ -103,13 +120,18 @@ export default function AccountHostingPage() {
                             <p className="text-accent2 text-sm md:text-base font-bold text-center sm:text-left">or Upload Photos</p>
                             <div className="flex gap-2">
                                 {photos.length > 0 && (
-                                    photos.map(link => (
-                                    <div className="w-[20%]">
-                                        <img src={'http://localhost:4000/uploads/'+link} alt="" className="max-w-full h-auto" />
-                                        </div>
+                                    photos.map((link, index) => (
+                                    <div key={index} className="w-[30%] md:w-[25%] aspect-square">
+                                        <img src={'http://localhost:4000/uploads/'+link} alt="" className="object-cover h-full w-full"/>
+                                    </div>
                                     ))
                                 )}
-                                <button className="transparent w-[20%] py-12 rounded-md text-2xl"><i className="fi fi-tr-cloud-upload-alt mr-2"></i>Upload</button>
+                                <div className="w-[30%] md:w-[25%] flex aspect-square">
+                                    <label className="w-full flex items-center justify-center cursor-pointer transparent rounded-md border-2 border-dashed border-accent2 text-sm md:text-2xl lg:text-4xl">
+                                        <input type="file" multiple className="hidden" onChange={uploadPhoto}/>
+                                        <i className="fi fi-tr-cloud-upload-alt mr-2"></i>Upload
+                                    </label>
+                                </div>
                             </div>
                         </div>
                         <div className="w-full">

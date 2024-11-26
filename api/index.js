@@ -7,6 +7,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const imageDownloader = require('image-downloader');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 
 
 const bcryptSalt = bcrypt.genSaltSync(10);
@@ -85,6 +88,20 @@ app.post('/upload-by-link', async (req, res) => {
         dest: __dirname+'/uploads/'+newName,
     });
     res.json(newName);
+});
+
+const photosMiddleware = multer({dest: 'uploads/'})
+app.post('/upload-by-files', photosMiddleware.array('photos', 100), (req, res) => {
+    const uploadedFiles = [];
+    for (let i = 0; i < req.files.length; i++) {
+        const { path: filePath, originalname } = req.files[i];
+        const parts = originalname.split('.');
+        const ext = parts[parts.length - 1];
+        const newPath = filePath + '.' + ext;
+        fs.renameSync(filePath, newPath);
+        uploadedFiles.push(path.basename(newPath));
+    }
+    res.json(uploadedFiles)
 });
 
 app.listen(4000);

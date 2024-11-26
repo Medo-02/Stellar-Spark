@@ -7,9 +7,9 @@ export default function AccountNav() {
     function linkClasses(type = null) {
         let classes = "py-2 px-4 rounded-full flex items-center ";
         if (type === subpage) {
-            classes += "bg-secondary2 text-primary2 hover:text-accent1";
+            classes += "bg-secondary2 text-primary2 hover:text-accent1 text-center text-sm md:text-md lg:text-lg";
         } else {
-            classes += "bg-gray-500 text-accent1 hover:text-secondary2";
+            classes += "bg-gray-500 text-accent1 hover:text-secondary2 text-center text-xs md:text-md lg:text-lg";
         }
         return classes;
     }
