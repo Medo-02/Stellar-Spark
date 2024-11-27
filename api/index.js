@@ -15,6 +15,7 @@ const path = require('path');
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'jwt_secret';
 const UserModel = require('./models/User.js');
+const EventModel = require('./models/Event.js');
 mongoose.connect(process.env.MONGO_URL);
 
 app.use('/uploads', express.static(__dirname+'/uploads'));
@@ -102,6 +103,25 @@ app.post('/upload-by-files', photosMiddleware.array('photos', 100), (req, res) =
         uploadedFiles.push(path.basename(newPath));
     }
     res.json(uploadedFiles)
+});
+
+app.post('/events', (req, res) => {
+    const { token } = req.cookies;
+    const { 
+        title, description, location,
+        date, time, type, photos,
+        features, extraInfo, maxParticipants
+    } = req.body;
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) throw err;
+        const eventDoc = await EventModel.create({
+            owner: userData.id,
+            title, description, location,
+            date, time, type, photos,
+            features, extraInfo, maxParticipants
+        })
+        res.json(eventDoc);
+    })
 });
 
 app.listen(4000);
