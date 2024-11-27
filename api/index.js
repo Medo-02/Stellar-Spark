@@ -105,6 +105,14 @@ app.post('/upload-by-files', photosMiddleware.array('photos', 100), (req, res) =
     res.json(uploadedFiles)
 });
 
+app.get('/events', (req, res) => {
+    const { token } = req.cookies;
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) throw err;
+        res.json(await EventModel.find({owner: userData.id}));
+    });
+});
+
 app.post('/events', (req, res) => {
     const { token } = req.cookies;
     const { 

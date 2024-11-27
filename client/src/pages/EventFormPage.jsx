@@ -4,7 +4,7 @@ import { useState } from "react";
 import AccountNav from "../components/AccountNav";
 
 export default function EventFormPage() {
-    const {redirect, setRedirect} = useState(false);
+    const [redirect, setRedirect] = useState(false);
     //Event data
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
