@@ -29,6 +29,17 @@ export default function PhotosUploader({photos, onChange}) {
             });
         });
     }
+
+    function removePhoto(e, filename) {
+        e.preventDefault()
+        onChange([...photos.filter(p => p !== filename)]);
+    }
+
+    function selectAsMainPhoto(e, filename) {
+        e.preventDefault()
+        onChange([filename, ...photos.filter(p => p !== filename)])
+    }
+
     return (
         <div className="w-full">
             <h2 className="text-accent2 text-base md:text-lg font-bold border-b border-accent2 mb-2 text-center sm:text-left">Photos</h2>
@@ -40,8 +51,20 @@ export default function PhotosUploader({photos, onChange}) {
             <div className="flex gap-2">
                 {photos.length > 0 && (
                     photos.map((link, index) => (
-                    <div key={index} className="w-[30%] md:w-[25%] aspect-square">
+                        <div key={index} className="flex relative w-[30%] md:w-[25%] aspect-square">
                         <img src={'http://localhost:4000/uploads/'+link} alt="" className="object-cover h-full w-full"/>
+                        <button onClick={(e) => removePhoto(e, link)} className="absolute right-2 top-2 danger cursor-pointer rounded-lg py-1 px-1 text-sm lg:py-2">
+                            <i className="fi fi-rr-trash-xmark px-1"></i>
+                            <span className="hidden lg:inline">Remove</span>
+                        </button>
+                        <div onClick={(e) => selectAsMainPhoto(e, link)} className="absolute left-2 top-2">
+                            {link !== photos[0] && (
+                                <button className="primary cursor-pointer rounded-lg py-1 px-1 text-sm lg:py-2">
+                                    <i className="fi fi-rr-star px-1"></i>
+                                    <span className="hidden lg:inline">Main</span>
+                                </button>
+                            )}       
+                        </div>
                     </div>
                     ))
                 )}

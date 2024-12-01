@@ -1,11 +1,14 @@
 import PhotosUploader from "../components/PhotosUploader";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AccountNav from "../components/AccountNav";
+import { useParams } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 export default function EventFormPage() {
     const [redirect, setRedirect] = useState(false);
     //Event data
+    const { id } = useParams();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
@@ -17,6 +20,27 @@ export default function EventFormPage() {
     const [extraInfo, setExtraInfo] = useState('');
     const [maxParticipants, setMaxParticipants] = useState('');
 
+    useEffect(() => {
+        if (!id) {
+            return; 
+        }
+        axios.get('/events/' + id).then(res => {
+            const { data } = res;
+            setTitle(data.title);
+            setDescription(data.description);
+            setLocation(data.location)
+            const eventDate = new Date(data.date);
+            const formattedDate = eventDate.toISOString().split('T')[0];
+            setDate(formattedDate);
+            setTime(data.time);
+            setType(data.type);
+            setPhotos(data.photos);
+            setFeatures(data.features);
+            setExtraInfo(data.extraInfo);
+            setMaxParticipants(data.maxParticipants);
+        });
+    }, [id]);
+
     const featureOptions = [
     'Free Parking',
     'Food Provided',
@@ -25,14 +49,20 @@ export default function EventFormPage() {
     'Pet Friendly'
     ];
 
-    async function createEvent(e) {
+    async function saveEvent(e) {
         e.preventDefault();
         const eventData = {
             title, description, location,
             date, time, type, photos,
             features, extraInfo, maxParticipants
         }
-        await axios.post('/events', eventData);
+
+        if (!id) {
+            await axios.post('/events', eventData); 
+        } else {
+           await axios.put('/events', {id, ...eventData});  
+        }
+
         setRedirect(true);
     }
 
@@ -54,8 +84,15 @@ export default function EventFormPage() {
         <div className="page-container flex flex-col gap-4">
             <AccountNav/>
             <div className="flex flex-col gap-4 w-full px-4 sm:w-[75%] mx-auto">
-                <h1 className="font-bold text-primary1 text-2xl md:text-3xl lg:text-5xl mb-4 text-center sm:text-left">Create New Event</h1>  
-                <form onSubmit={createEvent} className="flex flex-col gap-4 items-center">
+                <h1 className="font-bold text-primary1 text-2xl md:text-3xl lg:text-5xl mb-4 text-center sm:text-left">
+                    {id && (
+                        <span>Edit Event</span>
+                    )}
+                    {!id && (
+                        <span>Create New Event</span>
+                    )}
+                </h1>  
+                <form onSubmit={saveEvent} className="flex flex-col gap-4 items-center">
                         <div className="w-full">
                             <h2 className="text-accent2 text-base md:text-lg font-bold border-b border-accent2 mb-2 text-center sm:text-left">Event Title <span className="text-red-500">*</span></h2>
                             <input type="text" placeholder="Add the title of the event" className="w-full" value={title} onChange={e => setTitle(e.target.value)} />
@@ -110,7 +147,9 @@ export default function EventFormPage() {
                             <h2 className="text-accent2 text-base md:text-lg font-bold border-b border-accent2 mb-2 text-center sm:text-left">Max Participants <span className="text-red-500">*</span></h2>
                             <input type="number" placeholder="Specify the maximum number of participants" className="w-full" value={maxParticipants} onChange={e => setMaxParticipants(e.target.value)} />
                         </div>
-                        <button className="primary rounded-full px-3 py-2 w-[90%] sm:w-[60%] md:w-[40%] lg:w-[20%] mt-2 mb-4 mx-auto" type="submit">Create Event</button>
+                    <button className="primary rounded-full px-3 py-2 w-[90%] sm:w-[60%] md:w-[40%] lg:w-[20%] mt-2 mb-4 mx-auto" type="submit">
+                        Save
+                    </button>
                 </form>
             </div>
         </div>

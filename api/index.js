@@ -132,4 +132,31 @@ app.post('/events', (req, res) => {
     })
 });
 
+app.put('/events/', (req, res) => {
+    const { token } = req.cookies;
+    const { 
+        id, title, description, location,
+        date, time, type, photos,
+        features, extraInfo, maxParticipants
+    } = req.body;
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) throw err;
+        const eventDoc = await EventModel.findById(id);
+        if (userData.id === eventDoc.owner.toString()) {
+            eventDoc.set({
+                title, description, location,
+                date, time, type, photos,
+                features, extraInfo, maxParticipants
+            })
+            await eventDoc.save()
+            res.json('ok');
+        }
+    })
+});
+
+app.get('/events/:id', async(req, res) => {
+    const { id } = req.params;
+    res.json(await EventModel.findById(id));
+});
+
 app.listen(4000);

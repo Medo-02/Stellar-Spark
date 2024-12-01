@@ -8,7 +8,7 @@ export default function Navbar() {
     const [mobileMenu, setMobileMenu] = useState(false);
 
     return (
-        <header className="fixed w-full p-3 flex flex-col bg-primary1">
+        <header className="fixed w-full p-3 flex flex-col bg-primary1 z-10">
             <div className="flex justify-between items-center">
                 {/* Logo */}
                 <Link to='/' className='flex items-center gap-1'>
