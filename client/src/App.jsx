@@ -11,6 +11,8 @@ import AccountPage from './pages/AccountPage'
 import AccountUpcomingPage from './pages/AccountUpcomingPage'
 import AccountHostingPage from './pages/AccountHostingPage'
 import EventFormPage from './pages/EventFormPage'
+import EventPage from './pages/EventPage';
+
 axios.defaults.baseURL = 'http://localhost:4000';
 axios.defaults.withCredentials = true;
 function App() {
@@ -28,6 +30,8 @@ function App() {
             <Route path='/account/hosting' element={<AccountHostingPage />} />
             <Route path='/account/hosting/new' element={<EventFormPage />} />
             <Route path='/account/hosting/:id' element={<EventFormPage />} />
+            <Route path='/event/:id' element={<EventPage />} />
+          
           </Routes>
       </UserContextProvider>
     </div>

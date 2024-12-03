@@ -38,11 +38,11 @@ export default function Navbar() {
                 <Link to={user?'/account':'/login'} className="flex items-center gap-2 bg-secondary1 border border-accent2 rounded-full py-2 px-4 shadow-md shadow-gray-300 group">
                     <div className="px-1 group-hover:text-accent1">
                         <i className="fi fi-br-menu-burger text-primary2 group-hover:text-accent1"></i>
-                </div>
-                <div className="px-3 py-2 bg-secondary2 rounded-full ">
-                    <i className="fi fi-rr-user text-primary2 group-hover:text-accent1"></i>
-                </div>
-                {user ? user.name : 'Login'}
+                    </div>
+                    <div className="px-3 py-2 bg-secondary2 rounded-full ">
+                        <i className="fi fi-rr-user text-primary2 group-hover:text-accent1"></i>
+                    </div>
+                    <span className="text-primary2 group-hover:text-accent1">{user ? user.name : 'Login'}</span>
                 </Link>
             </div>
             </div>

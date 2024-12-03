@@ -10,7 +10,7 @@ export default function AccountHostingPage() {
     const { user, ready } = useContext(UserContext);
     const [events, setEvents] = useState([]);
     useEffect(() => { 
-        axios.get('/events').then(({ data }) => {
+        axios.get('/user-events').then(({ data }) => {
             setEvents(data);
         });
     }, []);
@@ -27,8 +27,8 @@ export default function AccountHostingPage() {
             <div className="mt-4">
                 {events.length > 0 && events.map((event, index) => (
                     <Link to={'/account/hosting/'+event._id} key={index} className="flex flex-col relative w-[80%] mx-auto items-center md:flex-row md:items-stretch gap-2 bg-secondary2 p-4 rounded-2xl border-2 border-accent2 cursor-pointer">
-                        <div className="flex relative top-1 md:absolute md:right-1 gap-4 border-2 border-primary2 rounded-xl p-2 mb-2">
-                                <p className="text-primary2 text-sm md:text-base">
+                        <div className="flex relative top-1 md:absolute md:right-1 gap-4 border-2 border-primary2 rounded-xl p-2 mb-2 text-primary2 text-sm md:text-base">
+                                <p className="">
                                     <i className="fi fi-rr-calendar-clock px-2"></i>
                                     {new Date(event.date).toLocaleDateString('en-US', {
                                         year: 'numeric',
@@ -36,9 +36,9 @@ export default function AccountHostingPage() {
                                         day: 'numeric'
                                     })}
                                 </p>
-                                <p className="text-primary2 text-sm md:text-base">Time: {event.time}</p>
-                                <p className="text-primary2 text-sm md:text-base"><i className="fi fi-rr-marker px-2"></i>{event.location}</p>
-                                <p className="text-primary2 text-sm md:text-base"><i className="fi fi-bs-users-alt px-2"></i>{event.maxParticipants}</p>
+                                <p className="">Time: {event.time}</p>
+                                <p className=""><i className="fi fi-rr-marker px-2"></i>{event.location}</p>
+                                <p className=""><i className="fi fi-bs-users-alt px-2"></i>{event.maxParticipants}</p>
                         </div>
                         <div className="w-[80%] md:w-[12%] aspect-square">
                             <img src={'http://localhost:4000/uploads/'+event.photos[0]} alt="" className="object-cover h-full w-full"/>

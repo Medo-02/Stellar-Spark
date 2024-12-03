@@ -105,13 +105,17 @@ app.post('/upload-by-files', photosMiddleware.array('photos', 100), (req, res) =
     res.json(uploadedFiles)
 });
 
-app.get('/events', (req, res) => {
+app.get('/user-events', (req, res) => {
     const { token } = req.cookies;
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         if (err) throw err;
         res.json(await EventModel.find({owner: userData.id}));
     });
 });
+
+app.get('/events', async(req, res) => {
+    res.json(await EventModel.find())
+})
 
 app.post('/events', (req, res) => {
     const { token } = req.cookies;
@@ -158,5 +162,6 @@ app.get('/events/:id', async(req, res) => {
     const { id } = req.params;
     res.json(await EventModel.findById(id));
 });
+
 
 app.listen(4000);
