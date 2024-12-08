@@ -1,10 +1,13 @@
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export default function EventPage() {
+    const [redirect, setRedirect] = useState('');
     const { id } = useParams();
     const [event, setEvent] = useState(null);
+    const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
     const [showAllPhotos, setShowAllPhotos] = useState(false);
     const [showFullDescription, setShowFullDescription] = useState(false);
 
@@ -40,6 +43,19 @@ export default function EventPage() {
     }
 
     const toggleDescription = () => setShowFullDescription(!showFullDescription);
+
+    async function joinEvent() {
+
+        const upcomingData = { event:event._id, name, phone }
+        const res = await axios.post('/upcomings', upcomingData); 
+        const upcomingId = res.data._id;
+
+        setRedirect('/account/upcoming/' + upcomingId);
+    }
+    
+    if (redirect) {
+        return <Navigate to={redirect} />
+    }
 
     return (
         <div className="page-container bg-primary2 bg-opacity-40 text-secondary1 shadow-lg">
@@ -114,9 +130,20 @@ export default function EventPage() {
                 <div className="flex flex-col gap-3 p-6 items-center justify-around rounded-2xl bg-accent3 border border-accent2 shadow-2xl">
                     <p className="text-primary1 text-2xl">
                         Number of available seats:{" "}
-                        <span className="font-bold">{event.maxParticipants}</span>
+                        <span className="font-bold">{event.maxParticipants - event.participantsCount}</span>
                     </p>
-                    <button className="bg-primary1 text-primary2 py-3 w-[80%] rounded-2xl shadow-lg">
+                    <div className="flex flex-col w-[80%]">
+                        <div className="w-full">
+                            <h3 className="text-accent2 text-base md:text-lg font-bold mb-2 text-center sm:text-left">Your full name <span className="text-red-500">*</span></h3>
+                            <input type="text" placeholder="" className="w-full" value={name} onChange={e => setName(e.target.value)} />
+                        </div>
+
+                        <div className="w-full">
+                            <h3 className="text-accent2 text-base md:text-lg font-bold mb-2 text-center sm:text-left">Your phone number <span className="text-red-500">*</span></h3>
+                            <input type="text" placeholder="Ex. 054123456" className="w-full" value={phone} onChange={e => setPhone(e.target.value)} />
+                        </div>
+                    </div>
+                    <button onClick={joinEvent} className="bg-primary1 text-primary2 py-3 w-[80%] rounded-2xl shadow-lg">
                         Join Now
                     </button>
                 </div>

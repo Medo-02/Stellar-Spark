@@ -13,6 +13,7 @@ const EventSchema = new mongoose.Schema({
     features: [String],
     extraInfo: String,
     maxParticipants: Number,
+    participantsCount: Number,
 });
 
 const EventModel = mongoose.model('Event', EventSchema);

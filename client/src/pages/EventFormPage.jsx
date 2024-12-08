@@ -54,7 +54,7 @@ export default function EventFormPage() {
         const eventData = {
             title, description, location,
             date, time, type, photos,
-            features, extraInfo, maxParticipants
+            features, extraInfo, maxParticipants,
         }
 
         if (!id) {

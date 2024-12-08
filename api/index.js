@@ -16,6 +16,7 @@ const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'jwt_secret';
 const UserModel = require('./models/User.js');
 const EventModel = require('./models/Event.js');
+const UpcomingModel = require('./models/Upcoming.js');
 mongoose.connect(process.env.MONGO_URL);
 
 app.use('/uploads', express.static(__dirname+'/uploads'));
@@ -130,7 +131,8 @@ app.post('/events', (req, res) => {
             owner: userData.id,
             title, description, location,
             date, time, type, photos,
-            features, extraInfo, maxParticipants
+            features, extraInfo, maxParticipants,
+            participantsCount: 0
         })
         res.json(eventDoc);
     })
@@ -163,5 +165,31 @@ app.get('/events/:id', async(req, res) => {
     res.json(await EventModel.findById(id));
 });
 
+app.post('/upcomings', async (req, res) => {
+    const { token } = req.cookies;
+    const { event, name, phone } = req.body;
+
+    try {
+        jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) throw err;
+        const doc = await UpcomingModel.create({
+            owner: userData.id, event, name, phone
+        });
+        await EventModel.findByIdAndUpdate(event, { $inc: { participantsCount: 1 } });
+        res.json(doc);
+    })
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.get('/user-upcomings', (req, res) => {
+    const { token } = req.cookies;
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) throw err;
+        res.json(await UpcomingModel.find({owner: userData.id}).populate('event'));
+    });
+});
 
 app.listen(4000);
