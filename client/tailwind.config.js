@@ -22,6 +22,17 @@ export default {
         accent2: '#9FA3B2',    // Muted Gray 
         accent3: '#192939',    // Dark Navy 
       },
+      animation: {
+        'slide-in-out': 'slide-in-out 6s forwards',
+      },
+      keyframes: {
+        'slide-in-out': {
+          '0%': { transform: 'translateX(-100%)' }, // Start off-screen to the left
+          '25%': { transform: 'translateX(0)' },   // Move to original position (1 second)
+          '75%': { transform: 'translateX(0)' },   // Stay in position for 3 seconds
+          '100%': { transform: 'translateX(-100%)' }, // Move back off-screen to the left (1 second)
+        },
+      },
     },
   },
   plugins: [],

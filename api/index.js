@@ -176,6 +176,8 @@ app.post('/upcomings', async (req, res) => {
             owner: userData.id, event, name, phone
         });
         await EventModel.findByIdAndUpdate(event, { $inc: { participantsCount: 1 } });
+        await UserModel.findByIdAndUpdate(userData.id, { $addToSet: { upcomingEvent: event} });
+      
         res.json(doc);
     })
 
