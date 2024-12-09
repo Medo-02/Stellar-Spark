@@ -1,10 +1,15 @@
 import axios from "axios";
 import { Navigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { UserContext } from "../UserContext";
+import { useContext } from "react";
+
 
 export default function EventPage() {
+    const { user, ready, setUser } = useContext(UserContext);
     const [redirect, setRedirect] = useState('');
     const { id } = useParams();
+    const [joined, setJoined] = useState(false);
     const [event, setEvent] = useState(null);
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
@@ -16,7 +21,16 @@ export default function EventPage() {
         axios.get('/events/' + id).then(res => setEvent(res.data));
     }, []);
 
+    useEffect(() => {
+        if (user && event) {
+            setName(user.name);
+            const mappedUpcoming = user.upcomingEvents;
+            if (mappedUpcoming.includes(event._id)) setJoined(true);
+        }
+    }, [user, event]);
+
     if (!event) return '';
+
 
     if (showAllPhotos) {
         return (
@@ -45,12 +59,19 @@ export default function EventPage() {
     const toggleDescription = () => setShowFullDescription(!showFullDescription);
 
     async function joinEvent() {
+        if (user === null) {
+            setRedirect('/login')
+        } else {
+            const upcomingData = { event:event._id, name, phone }
+            const res = await axios.post('/upcomings', upcomingData); 
+            const upcomingId = res.data._id;
 
-        const upcomingData = { event:event._id, name, phone }
-        const res = await axios.post('/upcomings', upcomingData); 
-        const upcomingId = res.data._id;
-
-        setRedirect('/account/upcoming/' + upcomingId);
+            // Call /profile to refresh user data
+            const profileRes = await axios.get('/profile');
+            setUser(profileRes.data);
+    
+            setRedirect('/account/upcoming/');
+        }    
     }
     
     if (redirect) {
@@ -132,20 +153,43 @@ export default function EventPage() {
                         Number of available seats:{" "}
                         <span className="font-bold">{event.maxParticipants - event.participantsCount}</span>
                     </p>
+                    { !joined && (
                     <div className="flex flex-col w-[80%]">
                         <div className="w-full">
                             <h3 className="text-accent2 text-base md:text-lg font-bold mb-2 text-center sm:text-left">Your full name <span className="text-red-500">*</span></h3>
-                            <input type="text" placeholder="" className="w-full" value={name} onChange={e => setName(e.target.value)} />
+                            <input 
+                                type="text" 
+                                placeholder="" 
+                                className="w-full" 
+                                value={name} 
+                                onChange={e => setName(e.target.value)} 
+                                required    
+                            />
                         </div>
 
                         <div className="w-full">
                             <h3 className="text-accent2 text-base md:text-lg font-bold mb-2 text-center sm:text-left">Your phone number <span className="text-red-500">*</span></h3>
-                            <input type="text" placeholder="Ex. 054123456" className="w-full" value={phone} onChange={e => setPhone(e.target.value)} />
+                            <input 
+                                type="text" 
+                                placeholder="Ex. 054123456" 
+                                className="w-full" 
+                                value={phone} 
+                                onChange={e => setPhone(e.target.value)} 
+                                required
+                            />
                         </div>
                     </div>
-                    <button onClick={joinEvent} className="bg-primary1 text-primary2 py-3 w-[80%] rounded-2xl shadow-lg">
-                        Join Now
-                    </button>
+                    )}
+                    {!joined && (
+                        <button onClick={joinEvent} className="bg-primary1 text-primary2 py-3 w-[80%] rounded-2xl shadow-lg">
+                            Join Now
+                        </button>
+                    )}
+                    {joined && (
+                        <button onClick={joinEvent} className="bg-gray-500 text-primary2 py-3 w-[80%] rounded-2xl shadow-lg cursor-not-allowed" disabled>
+                            Already joined
+                        </button>
+                    )}
                 </div>
             </section>
 

@@ -69,8 +69,8 @@ app.get('/profile', (req, res) => {
     if (token) {
         jwt.verify(token, jwtSecret, {}, async (err, userData) => {
             if (err) throw err;
-            const {name, email, _id} = await UserModel.findById(userData.id);
-            res.json({name, email, _id});
+            const {name, email, _id, upcomingEvents} = await UserModel.findById(userData.id);
+            res.json({name, email, _id, upcomingEvents});
         });
     } else {
         res.json(null);
@@ -176,7 +176,7 @@ app.post('/upcomings', async (req, res) => {
             owner: userData.id, event, name, phone
         });
         await EventModel.findByIdAndUpdate(event, { $inc: { participantsCount: 1 } });
-        await UserModel.findByIdAndUpdate(userData.id, { $addToSet: { upcomingEvent: event} });
+        await UserModel.findByIdAndUpdate(userData.id, { $addToSet: { upcomingEvents: event} });
       
         res.json(doc);
     })

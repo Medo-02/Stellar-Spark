@@ -1,6 +1,7 @@
 import { Link, Navigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import { UserContext } from "../UserContext";
+import Snackbar from "../components/Snackbar";
 import axios from "axios";
 
 export default function LoginPage() {
@@ -8,6 +9,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
     const { setUser } = useContext(UserContext);
+    const [snackbar, setSnackbar] = useState(false);
 
     async function loginUser(e) {
         e.preventDefault();
@@ -16,7 +18,10 @@ export default function LoginPage() {
             setUser(data);
             setRedirect(true);
         } catch (e) {
-            alert('Login failed');   
+            setSnackbar(true);
+            setTimeout(() => {
+                setSnackbar(false)
+            }, 6000);   
         }
     }
 
@@ -25,7 +30,8 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="page-container-fixed">
+        <div className="page-container-fixed relative">
+            {snackbar && (<Snackbar text={'Login failed'} subText={'Email or password is not correct'} />)}
             <h1 className="font-bold text-primary1 text-2xl md:text-3xl lg:text-5xl mb-4">Login</h1>   
             <form onSubmit={loginUser} className="container mx-auto px-4 flex flex-col gap-3 max-w-sm md:max-w-md lg:max-w-lg">
                 <input className="w-full p-2 rounded-md border border-accent2" required type="email"
